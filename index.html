@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BCA Student LMS Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .progress-bar-bg {
+            background-color: #e5e7eb;
+        }
+        .progress-bar {
+            transition: width 0.5s ease-in-out;
+        }
+        .text-inter {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <!-- Header -->
+    <header class="bg-white shadow-lg rounded-lg p-6 mb-8 text-center">
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-800 text-inter">BCA Student Learning Management System</h1>
+        <p class="text-gray-500 mt-2 text-inter">Student Profile Dashboard</p>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main id="student-profiles-container" class="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <!-- Student profiles will be inserted here by JavaScript -->
+    </main>
+
+    <script>
+        // Use a UUID for a unique app ID.
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'bca-lms-app';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+
+        // Mock data for the students
+        const students = [
+            {
+                name: "S.Shelar ",
+                prn: "BCA2023001",
+                feeStatus: "Pending",
+                photo: "https://placehold.co/100x100/AEC9F0/000000?text=SH",
+                lectureProgress: 00,
+                assignmentProgress: 00,
+                theoryProgress: 00,
+                pdfBookLink: "#",
+                orderBookLink: "#",
+                customerCareNumber: "1800-123-4567",
+                subjects: [
+                    { code: "01", name: "Computer Hardware" },
+                    { code: "02", name: "Computer Networking" },
+                    { code: "04", name: "C language" },
+                    { code: "05", name: "C++" },
+					{ code: "06", name: "HTML" },
+					{ code: "07", name: "GK" },
+					{ code: "07", name: "OS-Operating System" },
+                ]
+            },
+            {
+                name: "S.katimani",
+                prn: "BCA2023002",
+                feeStatus: "Pending",
+                photo: "https://placehold.co/100x100/F0B2A0/000000?text=SK",
+                lectureProgress: 00,
+                assignmentProgress: 00,
+                theoryProgress: 00,
+                pdfBookLink: "#",
+                orderBookLink: "#",
+                customerCareNumber: "1800-123-4567",
+                subjects: [
+                    { code: "01", name: "Computer Hardware" },
+                    { code: "02", name: "Computer Networking" },
+                    { code: "03", name: "office-2021" },
+                    { code: "04", name: "C language" },
+                    { code: "05", name: "C++" },
+                    { code: "06", name: "Software Engineering" },
+                    { code: "07", name: "Operating Systems" },
+                    { code: "08", name: "Computer Networkings" }
+                ]
+            },
+            {
+                name: "S.Swami",
+                prn: "BCA2023003",
+                feeStatus: "Pending",
+                photo: "https://placehold.co/100x100/A0E6C5/000000?text=SS",
+                lectureProgress: 00,
+                assignmentProgress: 00,
+                theoryProgress: 00,
+                pdfBookLink: "#",
+                orderBookLink: "#",
+                customerCareNumber: "1800-123-4567",
+                subjects: [
+                    { code: "01", name: "Computer Hardware" },
+                    { code: "02", name: "Computer Networking" },
+                    { code: "03", name: "office-2021" },
+                    { code: "04", name: "C language" },
+                    { code: "05", name: "C++" },
+                    { code: "06", name: "Software Engineering" },
+                    { code: "07", name: "Operating Systems" },
+                    { code: "08", name: "Computer Networkings" }
+                ]
+            },
+            {
+                name: "S.Joshi",
+                prn: "BCA2023004",
+                feeStatus: "Pending",
+                photo: "https://placehold.co/100x100/D0A0E6/000000?text=SJ",
+                lectureProgress: 00,
+                assignmentProgress: 00,
+                theoryProgress: 00,
+                pdfBookLink: "#",
+                orderBookLink: "#",
+                customerCareNumber: "1800-123-4567",
+                subjects: [
+                    { code: "01", name: "Computer Hardware" },
+                    { code: "02", name: "Computer Networking" },
+                    { code: "03", name: "office-2021" },
+                    { code: "04", name: "C language" },
+                    { code: "05", name: "C++" },
+                    { code: "06", name: "Software Engineering" },
+                    { code: "07", name: "Operating Systems" },
+                    { code: "08", name: "Computer Networkings" }
+                ]
+            },
+            {
+                name: "A.Swami ",
+                prn: "BCA2023005",
+                feeStatus: "Pending",
+                photo: "https://placehold.co/100x100/A0B9F0/000000?text=AS",
+                lectureProgress: 00,
+                assignmentProgress: 00,
+                theoryProgress: 00,
+                pdfBookLink: "#",
+                orderBookLink: "#",
+                customerCareNumber: "1800-123-4567",
+                subjects: [
+                    { code: "01", name: "Computer Hardware" },
+                    { code: "02", name: "Computer Networking" },
+                    { code: "03", name: "office-2021" },
+                    { code: "04", name: "C language" },
+                    { code: "05", name: "C++" },
+                    { code: "06", name: "Software Engineering" },
+                    { code: "07", name: "Operating Systems" },
+                    { code: "08", name: "Computer Networkings" }
+                ]
+            },
+            
+            {
+                name: "S.Kulkarni",
+                prn: "BCA2023007",
+                feeStatus: "Paid",
+                photo: "https://placehold.co/100x100/A0F0E0/000000?text=SK",
+                lectureProgress: 00,
+                assignmentProgress: 00,
+                theoryProgress: 00,
+                pdfBookLink: "#",
+                orderBookLink: "#",
+                customerCareNumber: "1800-123-4567",
+                subjects: [
+                    { code: "01", name: "Computer Hardware" },
+                    { code: "02", name: "Computer Networking" },
+                    { code: "03", name: "office-2021" },
+                    { code: "04", name: "C language" },
+                    { code: "05", name: "C++" },
+                    { code: "06", name: "Software Engineering" },
+                    { code: "07", name: "Operating Systems" },
+                    { code: "08", name: "Computer Networkings" }
+                ]
+            },
+            {
+                name: "N.Patil",
+                prn: "BCA2023008",
+                feeStatus: "Paid",
+                photo: "https://placehold.co/100x100/F0E6A0/000000?text=NP",
+                lectureProgress: 00,
+                assignmentProgress: 00,
+                theoryProgress: 00,
+                pdfBookLink: "#",
+                orderBookLink: "#",
+                customerCareNumber: "1800-123-4567",
+                subjects: [
+                    { code: "01", name: "Computer Hardware" },
+                    { code: "02", name: "Computer Networking" },
+                    { code: "03", name: "office-2021" },
+                    { code: "04", name: "C language" },
+                    { code: "05", name: "C++" },
+                    { code: "06", name: "Software Engineering" },
+                    { code: "07", name: "Operating Systems" },
+                    { code: "08", name: "Computer Networkings" }
+                ]
+            },
+            {
+                name: "V.Swami ",
+                prn: "BCA2023009",
+                feeStatus: "Paid",
+                photo: "https://placehold.co/100x100/A0F0B8/000000?text=VS",
+                lectureProgress: 00,
+                assignmentProgress: 00,
+                theoryProgress: 00,
+                pdfBookLink: "#",
+                orderBookLink: "#",
+                customerCareNumber: "1800-123-4567",
+                subjects: [
+                    { code: "01", name: "Computer Hardware" },
+                    { code: "02", name: "Computer Networking" },
+                    { code: "03", name: "office-2021" },
+                    { code: "04", name: "C language" },
+                    { code: "05", name: "C++" },
+                    { code: "06", name: "Software Engineering" },
+                    { code: "07", name: "Operating Systems" },
+                    { code: "08", name: "Computer Networkings" }
+                ]
+            },
+            {
+                name: "S.shekh",
+                prn: "BCA2023010",
+                feeStatus: "Paid",
+                photo: "https://placehold.co/100x100/C5A0F0/000000?text=SS",
+                lectureProgress: 00,
+                assignmentProgress: 00,
+                theoryProgress: 00,
+                pdfBookLink: "#",
+                orderBookLink: "#",
+                customerCareNumber: "1800-123-4567",
+                subjects: [
+                    { code: "01", name: "Computer Hardware" },
+                    { code: "02", name: "Computer Networking" },
+                    { code: "03", name: "office-2021" },
+                    { code: "04", name: "C language" },
+                    { code: "05", name: "C++" },
+                    { code: "06", name: "Software Engineering" },
+                    { code: "07", name: "Operating Systems" },
+                    { code: "08", name: "Computer Networkings" }
+                ]
+            },
+            {
+                name: "R.mulla",
+                prn: "BCA2023011",
+                feeStatus: "Paid",
+                photo: "https://placehold.co/100x100/F0A0A5/000000?text=RM",
+                lectureProgress: 00,
+                assignmentProgress: 00,
+                theoryProgress: 00,
+                pdfBookLink: "#",
+                orderBookLink: "#",
+                customerCareNumber: "1800-123-4567",
+                subjects: [
+                    { code: "01", name: "Computer Hardware" },
+                    { code: "02", name: "Computer Networking" },
+                    { code: "03", name: "office-2021" },
+                    { code: "04", name: "C language" },
+                    { code: "05", name: "C++" },
+                    { code: "06", name: "Software Engineering" },
+                    { code: "07", name: "Operating Systems" },
+                    { code: "08", name: "Computer Networkings" }
+                ]
+            },
+            {
+                name: "P.chodhari",
+                prn: "BCA2023012",
+                feeStatus: "Paid",
+                photo: "https://placehold.co/100x100/A0C5F0/000000?text=PC",
+                lectureProgress: 00,
+                assignmentProgress: 00,
+                theoryProgress: 00,
+                pdfBookLink: "#",
+                orderBookLink: "#",
+                customerCareNumber: "1800-123-4567",
+                subjects: [
+                    { code: "01", name: "Computer Hardware" },
+                    { code: "02", name: "Computer Networking" },
+                    { code: "03", name: "office-2021" },
+                    { code: "04", name: "C language" },
+                    { code: "05", name: "C++" },
+                    { code: "06", name: "Software Engineering" },
+                    { code: "07", name: "Operating Systems" },
+                    { code: "08", name: "Computer Networkings" }
+                ]
+            },
+            {
+                name: "R.kasture ",
+                prn: "BCA2023013",
+                feeStatus: "Paid",
+                photo: "https://placehold.co/100x100/F0C9A5/000000?text=RK",
+                lectureProgress: 00,
+                assignmentProgress: 00,
+                theoryProgress: 00,
+                pdfBookLink: "#",
+                orderBookLink: "#",
+                customerCareNumber: "1800-123-4567",
+                subjects: [
+                    { code: "01", name: "Computer Hardware" },
+                    { code: "02", name: "Computer Networking" },
+                    { code: "03", name: "office-2021" },
+                    { code: "04", name: "C language" },
+                    { code: "05", name: "C++" },
+                    { code: "06", name: "Software Engineering" },
+                    { code: "07", name: "Operating Systems" },
+                    { code: "08", name: "Computer Networkings" }
+                ]
+            }
+        ];
+
+        // Function to create a progress bar HTML element
+        function createProgressBar(label, value) {
+            return `
+                <div class="mb-2">
+                    <p class="text-sm font-medium text-gray-700 text-inter">${label}: <span class="font-bold">${value}%</span></p>
+                    <div class="progress-bar-bg h-2 rounded-full overflow-hidden">
+                        <div class="progress-bar bg-blue-500 h-full rounded-full" style="width: ${value}%;"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Function to create a single student profile card
+        function createStudentProfile(student) {
+            const feeStatusColor = student.feeStatus === "Paid" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800";
+            const profileHtml = `
+                <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-2xl">
+                    <!-- Photo and Privacy Toggle -->
+                    <div class="flex items-center mb-4 space-x-4">
+                        <div class="relative w-24 h-24 flex-shrink-0">
+                            <img id="photo-${student.prn}" src="${student.photo}" alt="${student.name}'s photo" class="w-full h-full rounded-full object-cover">
+                        </div>
+                        <div>
+                            <h2 class="text-xl md:text-2xl font-bold text-gray-800 text-inter">${student.name}</h2>
+                            <p class="text-sm text-gray-500 text-inter">PRN: ${student.prn}</p>
+                            <span class="inline-block rounded-full px-3 py-1 text-xs font-semibold mt-2 ${feeStatusColor} text-inter">${student.feeStatus}</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 flex-grow">
+                        <!-- Progress Bars -->
+                        ${createProgressBar("Lecture Progress", student.lectureProgress)}
+                        ${createProgressBar("Assignment Progress", student.assignmentProgress)}
+                        ${createProgressBar("Theory Progress", student.theoryProgress)}
+
+                        <!-- Subject Codes -->
+                        <div>
+                            <p class="text-sm font-semibold text-gray-700 text-inter mb-1">Subjects:</p>
+                            <div class="flex flex-wrap gap-2">
+                                ${student.subjects.map(subject => `<span class="bg-gray-200 text-gray-700 text-xs font-medium px-2.5 py-0.5 rounded-full text-inter">Code ${subject.code}: ${subject.name}</span>`).join('')}
+                            </div>
+                        </div>
+
+                        <!-- Resources -->
+                        <div class="flex flex-col md:flex-row md:space-x-4 space-y-2 md:space-y-0">
+                            <a href="${student.pdfBookLink}" class="w-full md:w-1/2 block text-center bg-green-500 text-white py-2 px-4 rounded-full text-sm font-semibold hover:bg-green-600 transition duration-300 text-inter">Download PDF Book</a>
+                            <a href="${student.orderBookLink}" class="w-full md:w-1/2 block text-center bg-purple-500 text-white py-2 px-4 rounded-full text-sm font-semibold hover:bg-purple-600 transition duration-300 text-inter">Order New Book</a>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+					<div class="mt-4 pt-4 border-t border-gray-200 flex items-center justify-between">
+                        <div class="text-sm text-gray-500 text-inter">
+                            Programme Coordinator: <span class="font-medium text-gray-700">Pratik B. Lomate</span>
+                        </div>
+						
+                    <div class="mt-4 pt-4 border-t border-gray-200 flex items-center justify-between">
+                        <div class="text-sm text-gray-500 text-inter">
+                            Customer Care: <span class="font-medium text-gray-700">${student.customerCareNumber}</span>
+                        </div>
+                        <button onclick="togglePhotoPrivacy('${student.prn}')" class="text-xs text-blue-500 font-medium hover:underline text-inter">
+                            Toggle Photo
+                        </button>
+                    </div>
+                </div>
+            `;
+            return profileHtml;
+        }
+
+        // Function to toggle photo visibility
+        function togglePhotoPrivacy(prn) {
+            const photoElement = document.getElementById(`photo-${prn}`);
+            if (photoElement) {
+                photoElement.classList.toggle('opacity-0');
+            }
+        }
+
+        // Render all student profiles on page load
+        window.onload = function() {
+            const container = document.getElementById('student-profiles-container');
+            if (container) {
+                students.forEach(student => {
+                    container.innerHTML += createStudentProfile(student);
+                });
+            }
+        };
+
+    </script>
+</body>
+</html>
